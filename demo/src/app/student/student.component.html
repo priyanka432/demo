@@ -1,0 +1,163 @@
+<div class="row">
+    <div class="col-md-9"></div>
+    <div class="col-md-3">
+        <button mat-button (click)="studentList()">Student List</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4 top">
+        <form class="example-form" [formGroup]="student">
+            <!--Full Name-->
+            <mat-form-field class="example-full-width">
+                <mat-label>Full Name</mat-label>
+                <input matInput placeholder="Full Name" formControlName="studentName"
+                    [class.is-invalid]="student.get('studentName').invalid && student.get('studentName').touched">
+            </mat-form-field>
+            <small *ngIf="errors || (student.get('studentName').invalid && student.get('studentName').touched)"
+                class="text-danger">
+                <small *ngIf="student.get('studentName').errors.required">StudentName is required</small>
+                <small *ngIf="student.get('studentName').errors.pattern">StudentName only consist letters or
+                    spaces</small>
+            </small>
+            <!--Email-->
+            <mat-form-field class="example-full-width">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="Email" formControlName="studentEmail"
+                    [class.is-invalid]="student.get('studentEmail').invalid && student.get('studentEmail').touched">
+            </mat-form-field>
+            <small *ngIf="errors || (student.get('studentEmail').invalid && student.get('studentEmail').touched)"
+                class="text-danger">
+                <small *ngIf="student.get('studentEmail').errors.required">StudentEmail is required</small>
+                <small *ngIf="student.get('studentEmail').errors.email">put valid email</small>
+            </small>
+            <!--password-->
+            <mat-form-field appearance="fill" class="example-full-width">
+                <mat-label>Enter your password</mat-label>
+                <input matInput type="password" formControlName="password" #pswd
+                    [class.is-invalid]="student.get('password').invalid && student.get('password').touched">
+                <button mat-icon-button matSuffix (click)="showPassword(pswd)"  
+                      type="button">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+            <small *ngIf="errors || (student.get('password').invalid && student.get('password').touched)"
+                class="text-danger">
+                <small *ngIf="student.get('password').errors.required">password is required</small>
+                <small *ngIf="student.get('password').errors.pattern">Must contain at least one number and one uppercase
+                    and lowercase letter, and at least 8 or more characters</small>
+            </small>
+            <!--Mobile Number-->
+            <mat-form-field class="example-full-width">
+                <mat-label>Mobile Number</mat-label>
+                <input matInput placeholder="Mobile Number" formControlName="mobileNumber" maxlength="10"
+                    [class.is-invalid]="student.get('mobileNumber').invalid && student.get('mobileNumber').touched">
+            </mat-form-field>
+            <small *ngIf="errors || (student.get('mobileNumber').invalid && student.get('mobileNumber').touched)"
+                class="text-danger">
+                <small *ngIf="student.get('mobileNumber').errors.required">mobile number is required</small>
+                <small *ngIf="student.get('mobileNumber').errors.pattern">Mobile Number only consist to digits</small>
+            </small>
+            <!--Address-->
+            <mat-form-field class="example-full-width">
+                <mat-label>Address</mat-label>
+                <textarea matInput placeholder="Address" formControlName="address"></textarea>
+            </mat-form-field>
+            <small *ngIf="errors || (student.get('address').invalid && student.get('address').touched)"
+                class="text-danger">
+                <small *ngIf="student.get('address').errors.required">Address is required</small>
+            </small>
+            <!-- city state or postal code-->
+            <table class="example-full-width" cellspacing="0">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <!--city-->
+                            <mat-label>City</mat-label>
+                            <input matInput placeholder="Ex. San Francisco" formControlName="city">
+                        </mat-form-field><br>
+                        <small *ngIf="errors || (student.get('city').invalid && student.get('city').touched)"
+                            class="text-danger">
+                            <small *ngIf="student.get('city').errors.required">City is required</small>
+                            <small *ngIf="student.get('city').errors.pattern">City only consist letters or
+                                spaces</small>
+                        </small>
+                    </td>
+                    <!--State-->
+                    <td>
+                        <mat-form-field>
+                            <input type="text" matInput placeholder="States Group" formControlName="state" required
+                                [matAutocomplete]="autoGroup">
+                            <mat-autocomplete #autoGroup="matAutocomplete">
+                                <mat-optgroup *ngFor="let group of stateGroupOptions | async" [label]="group.letter">
+                                    <mat-option *ngFor="let name of group.names" [value]="name">
+                                        {{name}}
+                                    </mat-option>
+                                </mat-optgroup>
+                            </mat-autocomplete>
+                        </mat-form-field> <br>
+                        <small *ngIf="errors || (student.get('state').invalid && student.get('state').touched)"
+                            class="text-danger">
+                            <small *ngIf="student.get('state').errors.required">State is required</small>
+                            <small *ngIf="student.get('state').errors.pattern">State only consist letters or
+                                spaces</small>
+                        </small>
+                    </td>
+                    <!---postal Code-->
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Postal Code</mat-label>
+                            <input matInput #postalCode maxlength="6" placeholder="Ex. 940432" value="940432"
+                                formControlName="postalCode"
+                                [class.is-invalid]="student.get('postalCode').invalid && student.get('postalCode').touched">
+                            <mat-hint align="end">{{postalCode.value.length}} / 6</mat-hint>
+                        </mat-form-field><br>
+                        <small
+                            *ngIf="errors || (student.get('postalCode').invalid && student.get('postalCode').touched)"
+                            class="text-danger">
+                            <small *ngIf="student.get('postalCode').errors.required">Postal Code is required</small>
+                            <small *ngIf="student.get('postalCode').errors.pattern">Postal Code only consist to
+                                digits</small>
+                        </small>
+                    </td>
+                </tr>
+            </table>
+            <!--Gender-->
+            <mat-radio-group aria-label="Select an option" formControlName="gender"
+                [class.is-invalid]="student.get('gender').invalid && student.get('gender').touched">
+                <mat-radio-button value="Female">Female</mat-radio-button>
+                <mat-radio-button value="Male">Male</mat-radio-button>
+            </mat-radio-group><br>
+            <small *ngIf="errors || (student.get('gender').invalid && student.get('gender').touched)"
+                class="text-danger">
+                <small *ngIf="student.get('gender').errors.required">Gender is required</small>
+            </small>
+            <!--From Date-->
+            <mat-form-field color="accent">
+                <mat-label>From Date</mat-label>
+                <input matInput [matDatepicker]="picker1" [min]="minDate" formControlName="fromDate"
+                    [class.is-invalid]="student.get('fromDate').invalid && student.get('fromDate').touched">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+            <small *ngIf="errors || (student.get('fromDate').invalid && student.get('fromDate').touched)"
+                class="text-danger">
+                <small *ngIf="student.get('fromDate').errors.required">from date is required</small>
+            </small>
+            <!--End Date-->
+            <mat-form-field color="accent">
+                <mat-label>End Date</mat-label>
+                <input matInput [matDatepicker]="picker2" [min]="minEndDate" (mouseenter)="endDates()"
+                    formControlName="endDate"
+                    [class.is-invalid]="student.get('endDate').invalid && student.get('endDate').touched">
+                <mat-datepicker-toggle matSuffix [for]="picker2" (mouseenter)="endDates()"></mat-datepicker-toggle>
+                <mat-datepicker #picker2 color="primary" (mouseenter)="endDates()"></mat-datepicker>
+            </mat-form-field>
+            <small *ngIf="errors || (student.get('endDate').invalid && student.get('endDate').touched)"
+                class="text-danger">
+                <small *ngIf="student.get('endDate').errors.required">end date is required</small>
+            </small><br>
+            <button [disabled]="student.invalid" class="but" (click)="submit()">Submit</button>
+        </form>
+    </div>
+</div>
